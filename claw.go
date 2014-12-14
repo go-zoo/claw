@@ -18,8 +18,8 @@ type ClawHandler struct {
 	http.Handler
 }
 
-// NewHandler Generate a pointer to a ClawHandler
-func NewHandler(h http.Handler) *ClawHandler {
+// newHandler Generate a pointer to a ClawHandler
+func newHandler(h http.Handler) *ClawHandler {
 	return &ClawHandler{h}
 }
 
@@ -63,14 +63,14 @@ func (c *Claw) Use(h http.HandlerFunc) *ClawHandler {
 		for i, m := range c.Handlers {
 			switch i {
 			case 0:
-				stack = *NewHandler(m(h))
+				stack = *newHandler(m(h))
 			default:
-				stack = *NewHandler(m(stack))
+				stack = *newHandler(m(stack))
 			}
 		}
 		return &stack
 	}
-	return NewHandler(ClawFunc(h))
+	return newHandler(ClawFunc(h))
 }
 
 // Add some middleware to a particular handler
@@ -86,7 +86,7 @@ func (c *ClawHandler) Add(m ...interface{}) *ClawHandler {
 			}
 		}
 	}
-	return NewHandler(n)
+	return newHandler(n)
 }
 
 // Schema takes a Schema type variable and use it on the ClawHandler who call the function.
@@ -102,7 +102,7 @@ func (c *ClawHandler) Schema(sc ...Schema) *ClawHandler {
 		}
 	}
 
-	return NewHandler(t)
+	return newHandler(t)
 }
 
 // Mutate generate a valid handler with a provided http.HandlerFunc
