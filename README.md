@@ -18,6 +18,8 @@ to create shcemas for specific tasks.
 - Middleware Schema.
 - Compatible with every mux that implements ` http.Handler ` interface.
 
+[ `squiidz/claw/mw` content a simple logger and recovery middleware ]
+
 ## Example
 ```go
 package main
@@ -61,3 +63,7 @@ func main() {
 
 ## License
 MIT
+
+## Links
+
+Lightning Fast HTTP Mux : [Bone](https://github.com/squiidz/bone)

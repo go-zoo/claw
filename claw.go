@@ -13,10 +13,12 @@ import (
 	"reflect"
 )
 
+// CalwHandler only wrap a http.Handler
 type ClawHandler struct {
 	http.Handler
 }
 
+// NewHandler Generate a pointer to a ClawHandler
 func NewHandler(h http.Handler) *ClawHandler {
 	return &ClawHandler{h}
 }
@@ -24,6 +26,7 @@ func NewHandler(h http.Handler) *ClawHandler {
 // ClawFunc redefine http.HandlerFunc
 type ClawFunc func(rw http.ResponseWriter, req *http.Request)
 
+// Serve HTTP Request
 func (c ClawFunc) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	c(rw, req)
 }
@@ -108,7 +111,7 @@ func mutate(h http.HandlerFunc) MiddleWare {
 	}
 }
 
-// Get the interface type and transform to MiddleWare type.
+// Get the interface type and transform to MiddleWare type. If valid append to the Middleware stack
 func toMiddleware(m []interface{}) []MiddleWare {
 	var stack []MiddleWare
 	if len(m) > 0 {
