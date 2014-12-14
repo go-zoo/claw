@@ -11,12 +11,12 @@ package claw
 type Schema []MiddleWare
 
 // NewScheme generate a New Schema with the provided Middleware.
-func NewSchema(m ...interface{}) *Schema {
+func NewSchema(m ...interface{}) Schema {
 	if len(m) > 0 {
-		sch := &Schema{}
+		sch := Schema{}
 		stack := toMiddleware(m)
 		for _, s := range stack {
-			*sch = append(*sch, s)
+			sch = append(sch, s)
 		}
 		return sch
 	}

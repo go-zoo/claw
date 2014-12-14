@@ -74,7 +74,7 @@ func (c *Claw) Use(h http.HandlerFunc) *ClawHandler {
 }
 
 // Add some middleware to a particular handler
-func (c *ClawHandler) Add(m ...interface{}) http.Handler {
+func (c *ClawHandler) Add(m ...interface{}) *ClawHandler {
 	var n http.Handler
 	if m != nil {
 		stack := toMiddleware(m)
@@ -86,15 +86,19 @@ func (c *ClawHandler) Add(m ...interface{}) http.Handler {
 			}
 		}
 	}
-	return n
+	return NewHandler(n)
 }
 
 // Schema takes a Schema type variable and use it on the ClawHandler who call the function.
-func (c *ClawHandler) Schema(sc ...*Schema) *ClawHandler {
+func (c *ClawHandler) Schema(sc ...Schema) *ClawHandler {
 	var t http.Handler
 	for _, s := range sc {
-		for _, m := range *s {
-			t = m(c)
+		for i, _ := range s {
+			if i == 0 {
+				t = s[(len(s)-1)-i](c)
+			} else {
+				t = s[(len(s)-1)-i](t)
+			}
 		}
 	}
 
