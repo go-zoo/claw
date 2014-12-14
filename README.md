@@ -50,6 +50,7 @@ func main() {
 ```
 
 ## TODO
+- DOC
 - Refactoring
 - Debugging
 
