@@ -16,6 +16,7 @@ to create shcemas for specific tasks.
 - Middleware Chaining.
 - Global Middleware.
 - Middleware Schema.
+- Claw runs middleware in order: last enter first to run
 - Compatible with every mux that implements ` http.Handler ` interface.
 
 [ `squiidz/claw/mw` content a simple logger and recovery middleware ]
