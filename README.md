@@ -5,7 +5,7 @@ claw [![GoDoc](https://godoc.org/github.com/squiidz/claw?status.png)](http://god
 
 Claw is a Middleware chaining module, compatible with
 every mux who respects the ` http.Handler ` interface. Claw allows you
-to create schemas for specific tasks.
+to create Stack of middleware for specific tasks.
 
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Claw.jpg/640px-Claw.jpg)
 
@@ -15,7 +15,7 @@ to create schemas for specific tasks.
 - Also uses ` func(http.Handler) http.Handler ` as Middleware.
 - Middleware Chaining.
 - Global Middleware.
-- Middleware Schema.
+- Create Middleware Stack.
 - Claw runs middleware in order: last enter first to run
 - Compatible with every mux that implements ` http.Handler ` interface.
 
@@ -31,9 +31,9 @@ func main() {
 	// Create a new Claw instance, and set some Global Middleware.
 	c := claw.New(GlobalMiddleWare)
 
-	// You can also, create a Schema(), which is a stack
+	// You can also, create a Stack(), which is a stack
 	// of MiddleWare for a specific task
-	auth := c.NewSchema(CheckUser, CheckToken, ValidSession)
+	auth := c.NewStack(CheckUser, CheckToken, ValidSession)
 
 	// Wrap your global middleware with your handler
 	http.Handle("/home", c.Use(YourHandler))
@@ -41,8 +41,8 @@ func main() {
 	// Add some middleware on a specific handler.
 	http.Handle("/", c.Use(YourOtherHandler).Add(OtherMiddle)) 
 
-	// Add a Schema to the route.
-	http.Handle("/", c.Use(YourOtherHandler).Schema(auth)) 
+	// Add a Stack to the route.
+	http.Handle("/", c.Use(YourOtherHandler).Stack(auth)) 
 
 	// Start Listening
 	http.ListenAndServe(":8080", nil)
