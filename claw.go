@@ -8,9 +8,7 @@
 package claw
 
 import (
-	"fmt"
 	"net/http"
-	"reflect"
 )
 
 // CalwHandler only wrap a http.Handler
@@ -43,7 +41,7 @@ type Claw struct {
 func New(m ...interface{}) *Claw {
 	c := &Claw{}
 	if m != nil {
-		c.wrap(m)
+		c.Handlers = toMiddleware(m)
 	}
 	return c
 }
@@ -89,10 +87,10 @@ func (c *ClawHandler) Add(m ...interface{}) *ClawHandler {
 	return newHandler(n)
 }
 
-// Schema takes a Schema type variable and use it on the ClawHandler who call the function.
-func (c *ClawHandler) Schema(sc ...Schema) *ClawHandler {
+// Stack takes a Stack type variable and use it on the ClawHandler who call the function.
+func (c *ClawHandler) Stack(stk ...Stack) *ClawHandler {
 	var t http.Handler
-	for _, s := range sc {
+	for _, s := range stk {
 		for i, _ := range s {
 			if i == 0 {
 				t = s[(len(s)-1)-i](c)
@@ -103,32 +101,4 @@ func (c *ClawHandler) Schema(sc ...Schema) *ClawHandler {
 	}
 
 	return newHandler(t)
-}
-
-// Mutate generate a valid handler with a provided http.HandlerFunc
-func mutate(h http.HandlerFunc) MiddleWare {
-	return func(next http.Handler) http.Handler {
-		return ClawFunc(func(rw http.ResponseWriter, req *http.Request) {
-			h(rw, req)
-			next.ServeHTTP(rw, req)
-		})
-	}
-}
-
-// Get the interface type and transform to MiddleWare type. If valid append to the Middleware stack
-func toMiddleware(m []interface{}) []MiddleWare {
-	var stack []MiddleWare
-	if len(m) > 0 {
-		for _, f := range m {
-			switch v := f.(type) {
-			case func(http.ResponseWriter, *http.Request):
-				stack = append(stack, mutate(http.HandlerFunc(v)))
-			case func(http.Handler) http.Handler:
-				stack = append(stack, v)
-			default:
-				fmt.Println("[x] [", reflect.TypeOf(v), "] is not a valid MiddleWare Type.")
-			}
-		}
-	}
-	return stack
 }

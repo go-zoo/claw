@@ -7,15 +7,15 @@
 
 package claw
 
-// Schema is use to create some predefine middleware stack.
-type Schema []MiddleWare
+// Stack is use to create some predefine middleware stack.
+type Stack []MiddleWare
 
-// NewScheme generate a New Schema with the provided Middleware.
-func NewSchema(m ...interface{}) Schema {
+// NewScheme generate a New Stack with the provided Middleware.
+func NewStack(m ...interface{}) Stack {
 	if len(m) > 0 {
-		sch := Schema{}
-		stack := toMiddleware(m)
-		for _, s := range stack {
+		sch := Stack{}
+		stk := toMiddleware(m)
+		for _, s := range stk {
 			sch = append(sch, s)
 		}
 		return sch

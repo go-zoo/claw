@@ -11,36 +11,59 @@ func TestOrder(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/", nil)
 	response := httptest.NewRecorder()
 	c := New(func(rw http.ResponseWriter, req *http.Request) {
-		order += "2"
+		order += "b"
 	})
 	m := func(rw http.ResponseWriter, req *http.Request) {
-		order += "1"
+		order += "a"
 	}
 	h := func(rw http.ResponseWriter, req *http.Request) {}
 
 	c.Use(h).Add(m).ServeHTTP(response, request)
 
-	if order != "12" {
+	if order != "ab" {
 		t.Fatalf("Wrong execution order")
 	}
 }
 
-func TestSchema(t *testing.T) {
+func TestStack(t *testing.T) {
 	order := ""
 	request, _ := http.NewRequest("GET", "/", nil)
 	response := httptest.NewRecorder()
 	c := New()
-	s := NewSchema(func(rw http.ResponseWriter, req *http.Request) {
-		order += "1"
+	s := NewStack(func(rw http.ResponseWriter, req *http.Request) {
+		order += "a"
 	})
 	m := func(rw http.ResponseWriter, req *http.Request) {
-		order += "2"
+		order += "b"
 	}
 	h := func(rw http.ResponseWriter, req *http.Request) {}
 
-	c.Use(h).Add(m).Schema(s).ServeHTTP(response, request)
+	c.Use(h).Add(m).Stack(s).ServeHTTP(response, request)
 
-	if order != "12" {
+	if order != "ab" {
 		t.Fatalf("Wrong execution order")
+	}
+}
+
+func TestSurcharge(t *testing.T) {
+	result := ""
+	request, _ := http.NewRequest("GET", "/", nil)
+	response := httptest.NewRecorder()
+	c := New()
+	s := NewStack()
+	m := func(rw http.ResponseWriter, req *http.Request) {
+		result += "b"
+	}
+	for i := 0; i < 20; i++ {
+		s = append(s, mutate(m))
+	}
+
+	h := func(rw http.ResponseWriter, req *http.Request) {
+	}
+
+	c.Use(h).Stack(s).ServeHTTP(response, request)
+
+	if len(result) != 20 {
+		t.Fatalf("Doesn't run every middleware")
 	}
 }

@@ -4,17 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/squiidz/bone"
 	"github.com/squiidz/claw"
 	"github.com/squiidz/claw/mw"
 )
 
 func main() {
+	mux := bone.New()
 	c := claw.New(mw.Logger)
-	sch := claw.NewSchema(Middle1, Middle2)
+	stk := claw.NewStack(Middle1, Middle2)
 
-	http.Handle("/home", c.Use(Home).Schema(sch).Add(Useless))
+	mux.Handle("/home", c.Use(Home).Stack(stk))
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", mux)
 }
 
 func Home(rw http.ResponseWriter, req *http.Request) {
