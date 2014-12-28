@@ -5,7 +5,7 @@ claw [![GoDoc](https://godoc.org/github.com/squiidz/claw?status.png)](http://god
 
 Claw is a Middleware chaining module, compatible with
 every mux who respects the ` http.Handler ` interface. Claw allows you
-to create shcemas for specific tasks.
+to create schemas for specific tasks.
 
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Claw.jpg/640px-Claw.jpg)
 
@@ -50,6 +50,7 @@ func main() {
 ```
 
 ## TODO
+- DOC
 - Refactoring
 - Debugging
 

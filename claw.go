@@ -47,7 +47,7 @@ func New(m ...interface{}) *Claw {
 }
 
 // wrap add some Global middleware to the Claw.Handlers array
-func (c *Claw) wrap(m []interface{}) {
+func (c *Claw) Wrap(m []interface{}) {
 	stack := toMiddleware(m)
 	for _, s := range stack {
 		c.Handlers = append(c.Handlers, s)
@@ -69,6 +69,23 @@ func (c *Claw) Use(h http.HandlerFunc) *ClawHandler {
 		return &stack
 	}
 	return newHandler(ClawFunc(h))
+}
+
+// Merge all the global middleware with the provided http.HandlerFunc
+func (c *Claw) Merge(h http.Handler) *ClawHandler {
+	if len(c.Handlers) > 0 {
+		var stack ClawHandler
+		for i, m := range c.Handlers {
+			switch i {
+			case 0:
+				stack = *newHandler(m(h))
+			default:
+				stack = *newHandler(m(stack))
+			}
+		}
+		return &stack
+	}
+	return newHandler(h)
 }
 
 // Add some middleware to a particular handler
