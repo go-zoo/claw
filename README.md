@@ -7,7 +7,7 @@ Claw is a Middleware chaining module, compatible with
 every mux who respects the ` http.Handler ` interface. Claw allows you
 to create Stack of middleware for specific tasks.
 
-![alt tag](http://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Claw.jpg/640px-Claw.jpg)
+![alt tag](https://c2.staticflickr.com/4/3614/3452804064_edf131c788_z.jpg?zz=1)
 
 ## Features
 
