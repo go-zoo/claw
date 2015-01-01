@@ -1,4 +1,4 @@
-claw [![GoDoc](https://godoc.org/github.com/squiidz/claw?status.png)](http://godoc.org/github.com/squiidz/claw) [![Build Status](https://travis-ci.org/squiidz/claw.svg?branch=master)](https://travis-ci.org/squiidz/claw)
+claw [![GoDoc](https://godoc.org/github.com/squiidz/claw?status.png)](http://godoc.org/github.com/squiidz/claw) [![Build Status](https://travis-ci.org/go-zoo/claw.svg?branch=master)](https://travis-ci.org/squiidz/claw)
 =======
 
 ## What is claw ?
