@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/squiidz/bone"
-	"github.com/squiidz/claw"
-	"github.com/squiidz/claw/mw"
+	"github.com/go-zoo/claw"
+	"github.com/go-zoo/claw/mw"
 )
 
 func main() {
-	mux := bone.New()
+	mux := http.NewServeMux()
+
 	c := claw.New(mw.Logger)
 	stk := claw.NewStack(Middle1, Middle2)
 
