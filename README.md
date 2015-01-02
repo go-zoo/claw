@@ -68,4 +68,4 @@ MIT
 
 ## Links
 
-Lightning Fast HTTP Mux : [Bone](https://github.com/squiidz/bone)
+Lightning Fast HTTP Mux : [Bone](https://github.com/go-zoo/bone)
