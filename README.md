@@ -25,7 +25,7 @@ to create Stack of middleware for specific tasks.
 ```go
 package main
 
-import "github.com/squiidz/claw"
+import "github.com/go-zoo/claw"
 
 func main() {
 	// Create a new Claw instance, and set some Global Middleware.
