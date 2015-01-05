@@ -1,4 +1,4 @@
-claw [![GoDoc](https://godoc.org/github.com/squiidz/claw?status.png)](http://godoc.org/github.com/squiidz/claw) [![Build Status](https://travis-ci.org/go-zoo/claw.svg?branch=master)](https://travis-ci.org/squiidz/claw)
+claw [![GoDoc](https://godoc.org/github.com/squiidz/claw?status.png)](http://godoc.org/github.com/go-zoo/claw) [![Build Status](https://travis-ci.org/go-zoo/claw.svg?branch=master)](https://travis-ci.org/go-zoo/claw)
 =======
 
 ## What is claw ?
@@ -25,7 +25,7 @@ to create Stack of middleware for specific tasks.
 ```go
 package main
 
-import "github.com/squiidz/claw"
+import "github.com/go-zoo/claw"
 
 func main() {
 	// Create a new Claw instance, and set some Global Middleware.
