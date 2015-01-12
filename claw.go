@@ -47,7 +47,7 @@ func New(m ...interface{}) *Claw {
 }
 
 // wrap add some Global middleware to the Claw.Handlers array
-func (c *Claw) Wrap(m []interface{}) {
+func (c *Claw) wrap(m []interface{}) {
 	stack := toMiddleware(m)
 	for _, s := range stack {
 		c.Handlers = append(c.Handlers, s)

@@ -10,7 +10,7 @@ package claw
 // Stack is use to create some predefine middleware stack.
 type Stack []MiddleWare
 
-// NewScheme generate a New Stack with the provided Middleware.
+// NewStack generate a New Stack with the provided Middleware.
 func NewStack(m ...interface{}) Stack {
 	if len(m) > 0 {
 		sch := Stack{}
