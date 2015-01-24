@@ -45,6 +45,9 @@ func main() {
 	http.Handle("/", c.Use(YourOtherHandler).Stack(auth)) 
 
 	// Start Listening
+	// You can also wrap the global middlewares directly on the router
+	// instead of declaring claw.Use() on every handler,
+	// use http.ListenAndServe(":8080", claw.Merge(mux))
 	http.ListenAndServe(":8080", nil)
 }
 ```
