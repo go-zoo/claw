@@ -11,15 +11,12 @@ to create Stack of middleware for specific tasks.
 
 ## Features
 
-- Uses Standard ` func (http.ResponseWriter, *http.Request) ` as Middleware.
-- Also uses ` func(http.Handler) http.Handler ` as Middleware.
-- Middleware Chaining.
+- ` func (http.ResponseWriter, *http.Request) ` and  ` func(http.Handler) http.Handler ` as Middleware.
 - Global Middleware.
 - Create Middleware Stack.
 - Claw runs middleware in order: last enter first to run
-- Compatible with every mux that implements ` http.Handler ` interface.
 
-[ `squiidz/claw/mw` content a simple logger and recovery middleware ]
+[ `squiidz/claw/mw` content a simple logger and gzip compressor middleware ]
 
 ## Example
 ```go
@@ -45,6 +42,9 @@ func main() {
 	http.Handle("/", c.Use(YourOtherHandler).Stack(auth)) 
 
 	// Start Listening
+	// You can also wrap the global middlewares directly on the router
+	// instead of declaring claw.Use() on every handler,
+	// use http.ListenAndServe(":8080", claw.Merge(mux))
 	http.ListenAndServe(":8080", nil)
 }
 ```
