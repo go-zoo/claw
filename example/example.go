@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/go-zoo/claw"
 	"github.com/go-zoo/claw/mw"
@@ -11,12 +12,14 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
-	c := claw.New(mw.Logger)
+	logger := mw.NewLogger(os.Stdout, "[Example]", 2)
+
+	c := claw.New(logger)
 	stk := claw.NewStack(Middle1, Middle2)
 
-	mux.Handle("/home", c.Use(Home).Stack(stk))
+	mux.HandleFunc("/home", Home)
 
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8080", c.Merge(mux).Stack(stk))
 }
 
 func Home(rw http.ResponseWriter, req *http.Request) {

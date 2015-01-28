@@ -24,8 +24,38 @@ const (
 )
 
 var (
-	LOG = log.New(os.Stdout, "||CLAW|| ", 2)
+	logger = log.New(os.Stdout, "||CLAW|| ", 2)
 )
+
+func NewLogger(out io.Writer, prefix string, flag int) func(http.Handler) http.Handler {
+	logg := log.New(out, prefix+" ", flag)
+	return func(next http.Handler) http.Handler {
+		p := runtime.GOOS
+		return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+			switch req.Method {
+			case "GET":
+				if p != "windows" {
+					output(GET, req)
+				} else {
+					logg.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				}
+			case "POST":
+				if p != "windows" {
+					output(POST, req)
+				} else {
+					logg.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				}
+			case "DELETE":
+				if p != "windows" {
+					output(DELETE, req)
+				} else {
+					logg.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				}
+			}
+			next.ServeHTTP(rw, req)
+		})
+	}
+}
 
 // Very simple Console Logger
 func Logger(next http.Handler) http.Handler {
@@ -36,19 +66,19 @@ func Logger(next http.Handler) http.Handler {
 			if p != "windows" {
 				output(GET, req)
 			} else {
-				LOG.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				logger.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		case "POST":
 			if p != "windows" {
 				output(POST, req)
 			} else {
-				LOG.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				logger.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		case "DELETE":
 			if p != "windows" {
 				output(DELETE, req)
 			} else {
-				LOG.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				logger.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		}
 		next.ServeHTTP(rw, req)
@@ -57,7 +87,7 @@ func Logger(next http.Handler) http.Handler {
 
 // Set the color
 func output(meth string, req *http.Request) {
-	LOG.Printf("\x1b[%s[%s]\x1b[0m %s %s", meth, req.Method, req.RemoteAddr, req.RequestURI)
+	logger.Printf("\x1b[%s[%s]\x1b[0m %s %s", meth, req.Method, req.RemoteAddr, req.RequestURI)
 }
 
 // Recovery Middleware
