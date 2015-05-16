@@ -5,7 +5,7 @@
 *** 	github.com/squiidz      ***
 ***********************************/
 
-package mw
+package middleware
 
 import (
 	"compress/gzip"
@@ -35,19 +35,19 @@ func NewLogger(out io.Writer, prefix string, flag int) func(http.Handler) http.H
 			switch req.Method {
 			case "GET":
 				if p != "windows" {
-					output(GET, req)
+					output(logg, GET, req)
 				} else {
 					logg.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 				}
 			case "POST":
 				if p != "windows" {
-					output(POST, req)
+					output(logg, POST, req)
 				} else {
 					logg.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 				}
 			case "DELETE":
 				if p != "windows" {
-					output(DELETE, req)
+					output(logg, DELETE, req)
 				} else {
 					logg.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 				}
@@ -64,19 +64,19 @@ func Logger(next http.Handler) http.Handler {
 		switch req.Method {
 		case "GET":
 			if p != "windows" {
-				output(GET, req)
+				output(logger, GET, req)
 			} else {
 				logger.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		case "POST":
 			if p != "windows" {
-				output(POST, req)
+				output(logger, POST, req)
 			} else {
 				logger.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		case "DELETE":
 			if p != "windows" {
-				output(DELETE, req)
+				output(logger, DELETE, req)
 			} else {
 				logger.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
@@ -86,8 +86,8 @@ func Logger(next http.Handler) http.Handler {
 }
 
 // Set the color
-func output(meth string, req *http.Request) {
-	logger.Printf("\x1b[%s[%s]\x1b[0m %s %s", meth, req.Method, req.RemoteAddr, req.RequestURI)
+func output(log *log.Logger, meth string, req *http.Request) {
+	log.Printf("\x1b[%s[%s]\x1b[0m %s %s", meth, req.Method, req.RemoteAddr, req.RequestURI)
 }
 
 // Recovery Middleware

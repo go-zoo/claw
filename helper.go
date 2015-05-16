@@ -17,7 +17,7 @@ func mutate(h http.HandlerFunc) MiddleWare {
 }
 
 // Get the interface type and transform to MiddleWare type. If valid append to the Middleware stack
-func toMiddleware(m []interface{}) []MiddleWare {
+func toMiddleware(m ...interface{}) []MiddleWare {
 	var stack []MiddleWare
 	if len(m) > 0 {
 		for _, f := range m {
@@ -27,7 +27,7 @@ func toMiddleware(m []interface{}) []MiddleWare {
 			case func(http.Handler) http.Handler:
 				stack = append(stack, v)
 			default:
-				fmt.Println("[x] [", reflect.TypeOf(v), "] is not a valid MiddleWare Type.")
+				fmt.Printf("[x] [ %s ] is not a valid MiddleWare Type.\n", reflect.TypeOf(v))
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/go-zoo/claw"
-	"github.com/go-zoo/claw/mw"
+	mw "github.com/go-zoo/claw/middleware"
 )
 
 func main() {

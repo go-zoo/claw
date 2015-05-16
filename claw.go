@@ -41,17 +41,9 @@ type Claw struct {
 func New(m ...interface{}) *Claw {
 	c := &Claw{}
 	if m != nil {
-		c.Handlers = toMiddleware(m)
+		c.Handlers = toMiddleware(m...)
 	}
 	return c
-}
-
-// wrap add some Global middleware to the Claw.Handlers array
-func (c *Claw) wrap(m []interface{}) {
-	stack := toMiddleware(m)
-	for _, s := range stack {
-		c.Handlers = append(c.Handlers, s)
-	}
 }
 
 // Use, merge all the global middleware with the provided http.HandlerFunc
@@ -92,7 +84,7 @@ func (c *Claw) Merge(h http.Handler) *ClawHandler {
 func (c *ClawHandler) Add(m ...interface{}) *ClawHandler {
 	var n http.Handler
 	if m != nil {
-		stack := toMiddleware(m)
+		stack := toMiddleware(m...)
 		for i, s := range stack {
 			if i == 0 {
 				n = s(c)

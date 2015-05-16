@@ -14,7 +14,7 @@ type Stack []MiddleWare
 func NewStack(m ...interface{}) Stack {
 	if len(m) > 0 {
 		sch := Stack{}
-		stk := toMiddleware(m)
+		stk := toMiddleware(m...)
 		for _, s := range stk {
 			sch = append(sch, s)
 		}
