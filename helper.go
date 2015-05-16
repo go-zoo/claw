@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"runtime"
 )
 
 // Mutate generate a valid handler with a provided http.HandlerFunc
@@ -27,7 +28,7 @@ func toMiddleware(m ...interface{}) []MiddleWare {
 			case func(http.Handler) http.Handler:
 				stack = append(stack, v)
 			default:
-				fmt.Printf("[x] [ %s ] is not a valid MiddleWare Type.\n", reflect.TypeOf(v))
+				fmt.Printf("[x] %s of type %s is not a valid MiddleWare.\n", runtime.FuncForPC(reflect.ValueOf(v).Pointer()).Name(), reflect.TypeOf(v))
 			}
 		}
 	}
