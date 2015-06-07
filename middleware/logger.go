@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"

@@ -10,6 +10,7 @@ package middleware
 import (
 	"log"
 	"net/http"
+	"runtime/debug"
 )
 
 // Recovery Middleware
