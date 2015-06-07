@@ -1,20 +1,10 @@
-/**********************************
-***  Middleware Chaining in Go  ***
-***  Code is under MIT license  ***
-***    Code by CodingFerret     ***
-*** 	github.com/squiidz      ***
-***********************************/
-
 package middleware
 
 import (
-	"compress/gzip"
-	"io"
 	"log"
 	"net/http"
 	"os"
 	"runtime"
-	"runtime/debug"
 )
 
 const (
@@ -88,44 +78,4 @@ func Logger(next http.Handler) http.Handler {
 // Set the color
 func output(log *log.Logger, meth string, req *http.Request) {
 	log.Printf("\x1b[%s[%s]\x1b[0m %s %s", meth, req.Method, req.RemoteAddr, req.RequestURI)
-}
-
-// Recovery Middleware
-func Recovery(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		defer func() {
-			if err := recover(); err != nil {
-				rw.WriteHeader(http.StatusInternalServerError)
-				stack := debug.Stack()
-				log.Printf("PANIC: %s\n%s", err, stack)
-
-			}
-		}()
-		next.ServeHTTP(rw, req)
-	})
-}
-
-type zipResponse struct {
-	io.Writer
-	http.ResponseWriter
-}
-
-func (z zipResponse) Write(b []byte) (int, error) {
-	if z.Header().Get("Content-Type") == "" {
-		z.Header().Set("Content-Type", http.DetectContentType(b))
-	}
-	return z.Writer.Write(b)
-}
-
-// Compressing Middleware
-func Zipper(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rw.Header().Set("Content-Encoding", "gzip")
-
-		crw := gzip.NewWriter(rw)
-		defer crw.Close()
-
-		zrw := zipResponse{Writer: crw, ResponseWriter: rw}
-		next.ServeHTTP(zrw, req)
-	})
 }
