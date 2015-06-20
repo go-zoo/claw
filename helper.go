@@ -8,6 +8,7 @@ import (
 )
 
 // Mutate generate a valid handler with a provided http.HandlerFunc
+// Not for authentication middleware, let pass every request to the next handler
 func mutate(h http.HandlerFunc) MiddleWare {
 	return func(next http.Handler) http.Handler {
 		return ClawFunc(func(rw http.ResponseWriter, req *http.Request) {
